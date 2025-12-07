@@ -64,6 +64,17 @@
 
     <repositories>
         <repository>
+            <id>huaweicloud</id>
+            <name>Huawei Cloud Maven Mirror</name>
+            <url>https://repo.huaweicloud.com/repository/maven/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
             <id>central</id>
             <name>Maven Central</name>
             <url>https://repo.maven.apache.org/maven2/</url>
@@ -77,6 +88,17 @@
     </repositories>
 
     <pluginRepositories>
+        <pluginRepository>
+            <id>huaweicloud</id>
+            <name>Huawei Cloud Maven Mirror</name>
+            <url>https://repo.huaweicloud.com/repository/maven/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
         <pluginRepository>
             <id>central</id>
             <name>Maven Central</name>
