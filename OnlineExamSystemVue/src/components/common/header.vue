@@ -1,6 +1,11 @@
-<!-- 顶部信息栏 -->
+<!--
+ * @Author: DongHongzuo
+ * @Date: 2025-12-08 20:38:49
+-->
+<!-- 顶部信息栏，包含实时时间、用户操作与主题色切换 -->
 <template>
-    <header id="topbar">
+    <header id="topbar" :style="headerStyle">
+        <!-- 修改密码对话框 -->
         <el-dialog
             :append-to-body="true"
             style="z-index: 2028px"
@@ -43,10 +48,12 @@
         </el-dialog>
 
         <el-row>
-            <el-col :span="4" class="topbar-left">
+            <!-- 左侧系统标题与实时时间 -->
+            <el-col :span="4" class="topbar-left" :style="{ color: themeColors.headerText }">
               <img src="../../assets/img/考试.png" alt="" width="50" height="50" style="margin-top: 15px; margin-right: 10px">
-                <span style="font-size: 28px; font-weight: 400; color: white;">在线考试系统</span>
+                <span class="system-title">在线考试系统 {{ currentTime }}</span>
             </el-col>
+            <!-- 右侧折叠按钮与用户头像、退出入口 -->
             <el-col :span="20" class="topbar-right">
                 <i @click="toggle()"></i>
                 <div class="user">
@@ -82,28 +89,81 @@
 <script>
 import { mapState, mapMutations } from "vuex";
 export default {
+    // 顶部栏状态数据与生命周期钩子
     data() {
         return {
+            // 控制退出菜单与对话框的展示
             login_flag: false,
+            // 当前登录用户基础信息
             user: {
-                //用户信息
+                // 用户信息
                 userName: null,
                 userId: null,
             },
+            // 修改密码表单的弹窗与输入值
             dialogVisible: false,
             oldPsw: "",
             newPsw: "",
             confirmNewPsw: "",
+            // 角色用于区分配色
             role: 0,
+            // 页面展示的实时时间文本
+            currentTime: "",
+            // 计时器句柄，组件销毁时清理
+            timer: null,
         };
     },
     created() {
+        // 初始化用户信息与角色配色，并开启时钟刷新
         this.getUserInfo();
 
         this.role = this.$cookies.get("role");
+        this.startClock();
     },
-    computed: mapState(["flag", "menu"]),
+    beforeDestroy() {
+        // 离开页面时清除定时器，避免内存泄露
+        if (this.timer) {
+            clearInterval(this.timer);
+        }
+    },
+    computed: {
+        ...mapState(["flag", "menu"]),
+        themeColors() {
+            // 根据角色返回当前主题色板
+            return this.themeByRole();
+        },
+        headerStyle() {
+            // 封装头部样式，便于主题切换
+            return {
+                backgroundColor: this.themeColors.headerBg,
+                boxShadow: `5px 0px 12px ${this.themeColors.shadow}`,
+                color: this.themeColors.headerText,
+            };
+        },
+    },
     methods: {
+        startClock() {
+            // 初始化与定时更新当前时间
+            this.updateTime();
+            this.timer = setInterval(this.updateTime, 1000);
+        },
+        updateTime() {
+            // 生成本地化日期时间字符串
+            const now = new Date();
+            const pad = (val) => (val < 10 ? `0${val}` : val);
+            const dateStr = `${now.getFullYear()}年${pad(now.getMonth() + 1)}月${pad(now.getDate())}日`;
+            const timeStr = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+            this.currentTime = `${dateStr} ${timeStr}`;
+        },
+        themeByRole() {
+            // 不同角色使用不同主题配色
+            const palette = {
+                0: { headerBg: "#0f766e", headerText: "#e0f2f1", shadow: "rgba(15, 118, 110, 0.45)" },
+                1: { headerBg: "#7c3aed", headerText: "#f5f3ff", shadow: "rgba(124, 58, 237, 0.45)" },
+            };
+            const roleKey = Number(this.role);
+            return palette[roleKey] || { headerBg: "#0ea5e9", headerText: "#e0f2fe", shadow: "rgba(14, 165, 233, 0.45)" };
+        },
         // 管理员重置密码
         resetPsw() {
             if (this.oldPsw == "") {
@@ -190,6 +250,11 @@ export default {
     display: flex;
     justify-content: center;
     overflow: hidden;
+}
+.system-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: inherit;
 }
 .topbar-left .icon-kaoshi {
     font-size: 60px;

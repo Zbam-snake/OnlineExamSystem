@@ -1,15 +1,19 @@
+<!--
+ * @Author: DongHongzuo
+ * @Date: 2025-12-08 20:38:49
+-->
 <!--左边下拉导航栏-->
 <template>
-  <div id="left">
+  <div id="left" :style="{ backgroundColor: themeColors.sidebarBg, '--sidebar-hover': themeColors.sidebarHover, '--sidebar-bg': themeColors.sidebarBg }">
     <el-menu
-      active-text-color="lightgrey"
-      text-color="#000"
+      active-text-color="#e0f2fe"
+      text-color="#f8fafc"
       :default-active="this.$route.path"
       class="el-menu-vertical-demo"
       @open="handleOpen"
       @close="handleClose"
       :collapse="flag"
-      background-color="#2384d6"
+      :background-color="themeColors.sidebarBg"
       menu-trigger="click" router>
       <el-submenu v-for="(item,index) in menu" :index='item.index' :key="index">
         <template slot="title">
@@ -34,11 +38,17 @@ export default {
   name: "mainLeft",
   data() {
     return {
-
+      role: 0,
     }
   },
-  computed: mapState(["flag","menu"]),
+  computed: {
+    ...mapState(["flag","menu"]),
+    themeColors() {
+      return this.themeByRole();
+    }
+  },
   created() {
+    this.role = Number(this.$cookies.get("role"));
     this.addData()
   },
   methods: {
@@ -51,6 +61,13 @@ export default {
     //点击标题传递参数给navigator组件
     handleTitle(index) {
       this.bus.$emit('sendIndex',index)
+    },
+    themeByRole() {
+      const palette = {
+        0: { sidebarBg: '#115e59', sidebarHover: '#134e4a' },
+        1: { sidebarBg: '#5b21b6', sidebarHover: '#4c1d95' },
+      }
+      return palette[this.role] || { sidebarBg: '#0369a1', sidebarHover: '#075985' }
     },
     addData() {
       let role = this.$cookies.get("role")
@@ -79,12 +96,16 @@ export default {
   width: 213px;
 }
 .el-menu-vertical-demo:not(.el-menu--collapse) {
-  min-height: 900px;
+  min-height: calc(100vh - 80px);
 }
 #left {
-  height: 900px;
-  background-color: #38cdbb;
+  min-height: calc(100vh - 80px);
+  background-color: var(--sidebar-bg, #2384d6);
   z-index: 0;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+#left .el-menu-vertical-demo {
+  background-color: inherit;
 }
 #left .el-menu-vertical-demo .title {
   color: #fff;
@@ -92,11 +113,15 @@ export default {
   font-weight: bold;
   margin-left: 14px;
 }
+#left .el-submenu__title {
+  color: #f8fafc !important;
+}
 .el-submenu {
   border-bottom: 1px solid #eeeeee0f !important;
 }
 .el-submenu__title:hover {
-  background-color: #fff;
+  background-color: var(--sidebar-hover, #ffffff1c);
+  color: #fff;
 }
 .el-submenu__title i {
     color: #fbfbfc !important;

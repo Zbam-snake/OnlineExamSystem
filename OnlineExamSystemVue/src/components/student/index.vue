@@ -1,3 +1,7 @@
+<!--
+ * @Author: DongHongzuo
+ * @Date: 2025-12-08 20:38:49
+-->
 <!--学生考试首页-->
 
 <template>
@@ -15,7 +19,10 @@
                             user-drag: none;
                         " />
 
-                    <li class="logo"><span>在线考试系统</span></li>
+                    <li class="logo">
+                        <span>在线考试系统 {{ currentTime }}</span>
+                        <div class="welcome-text">同学你好，祝你考试顺利！</div>
+                    </li>
                     <li @click="exam()"><a href="javascript:;">考试中心</a></li>
                     <li @click="practice()">
                         <a href="javascript:;">试卷练习</a>
@@ -63,10 +70,18 @@ export default {
         return {
             flag: false,
             user: {},
+            currentTime: "",
+            timer: null,
         };
     },
     created() {
         this.userInfo();
+        this.startClock();
+    },
+    beforeDestroy() {
+        if (this.timer) {
+            clearInterval(this.timer);
+        }
     },
     methods: {
         exit() {
@@ -101,6 +116,17 @@ export default {
             this.$store.commit("practice", isPractice);
             this.$router.push({ path: "/student" });
         },
+        startClock() {
+            this.updateTime();
+            this.timer = setInterval(this.updateTime, 1000);
+        },
+        updateTime() {
+            const now = new Date();
+            const pad = (val) => (val < 10 ? `0${val}` : val);
+            const dateStr = `${now.getFullYear()}年${pad(now.getMonth() + 1)}月${pad(now.getDate())}日`;
+            const timeStr = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+            this.currentTime = `${dateStr} ${timeStr}`;
+        },
     },
     computed: mapState(["isPractice"]),
 };
@@ -114,14 +140,16 @@ export default {
 #student .padding-50 {
     margin: 0 auto;
     padding: 0 50px;
-    box-shadow: 0 0 10px 4px rgba(1, 149, 255, 0.1);
-    background-color: #fff;
+    box-shadow: 0 10px 20px rgba(234, 88, 12, 0.1);
+    background: linear-gradient(90deg, #fff7ed 0%, #fffaf0 100%);
+    border: 1px solid #fed7aa;
 }
 
 .list a {
     text-decoration: none;
-    color: #334046;
+    color: #7c2d12;
     font-size: 18px;
+    font-weight: 600;
 }
 
 li {
@@ -145,7 +173,7 @@ li {
 }
 
 #student .list li:hover a {
-    color: #0195ff;
+    color: #ea580c;
 }
 
 #student .list .right {
@@ -159,13 +187,25 @@ li {
 
 #student .list .logo {
     display: flex;
+    flex-direction: column;
+    justify-content: center;
     font-weight: bold;
-    color: black;
-    font-size: 28px;
+    color: #7c2d12;
+    font-size: 24px;
+    height: auto;
+    line-height: 1.3;
+    padding-top: 8px;
+    padding-bottom: 8px;
 }
 
 #student .list .logo i {
     font-size: 50px;
+}
+.welcome-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: #c2410c;
+    margin-top: 4px;
 }
 
 .right .msg {
@@ -176,7 +216,7 @@ li {
     display: flex;
     flex-direction: column;
     border-radius: 2px;
-    border-bottom: 3px solid #0195ff;
+    border-bottom: 3px solid #fb923c;
     background-color: #fff;
 }
 
@@ -187,6 +227,6 @@ li {
 }
 
 .right .msg p:hover {
-    background-color: #0195ff;
+    background-color: #fed7aa;
 }
 </style>
