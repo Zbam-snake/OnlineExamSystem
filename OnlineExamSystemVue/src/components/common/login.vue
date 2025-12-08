@@ -1,22 +1,29 @@
+<!--
+ * @Author: DongHongzuo
+ * @Date: 2025-12-08 20:38:49
+-->
 <template>
   <div class="container">
-    <div style="width: 25%; height: 45%; display: flex;background-color: #ffffff">
-      <div style="flex: 1;width: 50%; padding: 40px;display: flex;flex-direction: column;justify-content: center;" >
-        <div style="text-align: center; font-size: 30px; margin-bottom: 40px; color: #000000;font-size: 30px">在线考试管理系统</div>
+    <div class="login-card">
+      <div class="login-header">
+        <div class="brand-icon">
+          <img src="../../assets/img/考试.png" alt="logo">
+        </div>
+        <div>
+          <div class="title">在线考试管理系统</div>
+          <div class="subtitle">统一入口 · 安全快捷</div>
+        </div>
+      </div>
 
-        <el-form :label-position="labelPosition"  :model="formLabelAlign">
-        <el-form-item >
+      <el-form class="login-form" :label-position="labelPosition"  :model="formLabelAlign">
+        <el-form-item>
           <el-input v-model.number="formLabelAlign.username" placeholder="请输入用户名"></el-input>
         </el-form-item>
-        <el-form-item >
-          <el-input v-model="formLabelAlign.password" placeholder="请输入密码"
-                    type="password"></el-input>
+        <el-form-item>
+          <el-input v-model="formLabelAlign.password" placeholder="请输入密码" type="password"></el-input>
         </el-form-item>
-        <div >
-          <el-button type="primary" style="width: 100%;margin-top: 30px" @click="login()"> 登录</el-button>
-        </div>
+        <el-button type="primary" class="login-btn" @click="login()">登录</el-button>
       </el-form>
-      </div>
     </div>
   </div>
 </template>
@@ -129,15 +136,82 @@ export default {
 <style lang="less" scoped>
 
 .container {
-  height: 100vh;
+  min-height: 100vh;
   overflow: hidden;
-  //background-color: #0195ff;
-  background-image: url("../../assets/bg6.jpg");
-  background-size: 100% 100%;
+  background-image: linear-gradient(120deg, rgba(88, 28, 135, 0.68), rgba(190, 18, 60, 0.62)), url("../../assets/bg6.jpg");
+  background-size: cover;
+  background-position: center;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 32px 16px;
   color: #666;
+}
+
+.login-card {
+  width: 460px;
+  max-width: 100%;
+  padding: 36px 32px 30px;
+  border-radius: 14px;
+  background-color: #ffffff;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.login-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: #111;
+}
+
+.brand-icon {
+  width: 58px;
+  height: 58px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #fb7185, #f97316);
+  box-shadow: 0 10px 22px rgba(249, 115, 22, 0.25);
+}
+
+.brand-icon img {
+  width: 38px;
+  height: 38px;
+  user-select: none;
+}
+
+.title {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #0f172a;
+}
+
+.subtitle {
+  margin-top: 4px;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.login-form {
+  width: 100%;
+}
+
+.login-form .el-form-item {
+  margin-bottom: 18px;
+}
+
+.login-btn {
+  width: 100%;
+  height: 44px;
+  margin-top: 8px;
+  font-size: 16px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #f43f5e, #fb923c);
+  border-color: #f43f5e;
 }
 
 

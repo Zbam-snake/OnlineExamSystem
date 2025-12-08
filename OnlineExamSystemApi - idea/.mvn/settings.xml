@@ -1,0 +1,17 @@
+<!--
+ * @Author: DongHongzuo
+ * @Date: 2025-12-08 20:38:49
+-->
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 https://maven.apache.org/xsd/settings-1.0.0.xsd">
+    <!-- Prefer a mirror that remains accessible in restricted sandboxes. -->
+    <mirrors>
+        <mirror>
+            <id>huaweicloud</id>
+            <name>Huawei Cloud Maven Mirror</name>
+            <url>https://repo.huaweicloud.com/repository/maven/</url>
+            <mirrorOf>*</mirrorOf>
+        </mirror>
+    </mirrors>
+</settings>
